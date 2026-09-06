@@ -19,10 +19,10 @@ export interface RevolutXConfig {
 }
 
 function resolveApiKeyFromEnv(): string | undefined {
-  var raw =
+  const raw =
     process.env["REVOLUT_X_API_KEY"] ?? process.env["REVOLUTX_API_KEY"];
   if (!raw) return undefined;
-  var cleaned = raw.trim();
+  const cleaned = raw.trim();
   if (!/^[A-Za-z0-9]{64}$/.test(cleaned)) return undefined;
   return cleaned;
 }
@@ -118,12 +118,12 @@ export function ensureConfigDir(): void {
 
 export function loadConfig(): RevolutXConfig {
   const configFile = getConfigFile();
-  var envApiKey = resolveApiKeyFromEnv();
+  const envApiKey = resolveApiKeyFromEnv();
   if (!existsSync(configFile)) {
     return envApiKey ? { api_key: envApiKey } : {};
   }
   assertSecurePermissions(configFile, "config file");
-  var parsed: RevolutXConfig;
+  let parsed: RevolutXConfig;
   try {
     parsed = JSON.parse(readFileSync(configFile, "utf-8")) as RevolutXConfig;
   } catch {
