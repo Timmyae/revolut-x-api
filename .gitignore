@@ -19,10 +19,17 @@ data/
 
 # Environment / secrets
 .env
+.env.*
+!.env.example
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+*.pem
+config.json
+telegram.json
+events.json
+grid_state_*.json
 
 # MCP packaging build output
 mcp/packaging/mcpb/stage/

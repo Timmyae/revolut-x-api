@@ -375,6 +375,11 @@ Credentials are stored in the platform config directory:
 
 Override with the `REVOLUTX_CONFIG_DIR` environment variable.
 
+API key lookup order:
+1. `REVOLUT_X_API_KEY` (recommended for Codex Secret / CI)
+2. `REVOLUTX_API_KEY` (legacy alias)
+3. `config.json` (`api_key`) in the config directory
+
 | File | Contents |
 |------|----------|
 | `config.json` | API key |
@@ -383,6 +388,8 @@ Override with the `REVOLUTX_CONFIG_DIR` environment variable.
 | `telegram.json` | Telegram notification bot tokens |
 
 Credential files are written with owner-only permissions (`0o600`). The CLI refuses to load `private.pem` or `config.json` if their permissions are looser than that — if you hit an "insecure permissions" error, run `chmod 600 ~/.config/revolut-x/<file>`.
+
+Never commit real API keys, PEM files, or runtime account state/log files.
 
 ---
 

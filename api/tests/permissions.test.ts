@@ -92,13 +92,21 @@ describeUnix("loadPrivateKey permission enforcement", () => {
 describeUnix("loadConfig permission enforcement", () => {
   let dir: string;
   const origEnv = process.env["REVOLUTX_CONFIG_DIR"];
+  const origApiKeyEnv = process.env["REVOLUT_X_API_KEY"];
+  const origApiKeyLegacyEnv = process.env["REVOLUTX_API_KEY"];
 
   beforeEach(() => {
     dir = mkdtempSync(join(tmpdir(), "revx-perm-"));
     process.env["REVOLUTX_CONFIG_DIR"] = dir;
+    delete process.env["REVOLUT_X_API_KEY"];
+    delete process.env["REVOLUTX_API_KEY"];
   });
 
   afterEach(() => {
+    if (origApiKeyEnv === undefined) delete process.env["REVOLUT_X_API_KEY"];
+    else process.env["REVOLUT_X_API_KEY"] = origApiKeyEnv;
+    if (origApiKeyLegacyEnv === undefined) delete process.env["REVOLUTX_API_KEY"];
+    else process.env["REVOLUTX_API_KEY"] = origApiKeyLegacyEnv;
     if (origEnv === undefined) delete process.env["REVOLUTX_CONFIG_DIR"];
     else process.env["REVOLUTX_CONFIG_DIR"] = origEnv;
     rmSync(dir, { recursive: true, force: true });
@@ -114,6 +122,36 @@ describeUnix("loadConfig permission enforcement", () => {
     saveConfig({ api_key: "a".repeat(64) });
     chmodSync(join(dir, "config.json"), 0o644);
     expect(() => loadConfig()).toThrow(/insecure permissions/);
+  });
+
+  it("uses REVOLUT_X_API_KEY from environment", () => {
+    const envKey = "A".repeat(64);
+    process.env["REVOLUT_X_API_KEY"] = envKey;
+    saveConfig({ api_key: "b".repeat(64) });
+    const config = loadConfig();
+    expect(config.api_key).toBe(envKey);
+  });
+
+  it("uses REVOLUT_X_API_KEY when config file is missing", () => {
+    const envKey = "F".repeat(64);
+    process.env["REVOLUT_X_API_KEY"] = envKey;
+    const config = loadConfig();
+    expect(config.api_key).toBe(envKey);
+  });
+
+  it("uses REVOLUTX_API_KEY legacy alias when primary env var is unset", () => {
+    const envKey = "C".repeat(64);
+    process.env["REVOLUTX_API_KEY"] = envKey;
+    saveConfig({ api_key: "d".repeat(64) });
+    const config = loadConfig();
+    expect(config.api_key).toBe(envKey);
+  });
+
+  it("ignores invalid environment API key values", () => {
+    process.env["REVOLUT_X_API_KEY"] = "invalid";
+    saveConfig({ api_key: "e".repeat(64) });
+    const config = loadConfig();
+    expect(config.api_key).toBe("e".repeat(64));
   });
 });
 
