@@ -18,6 +18,15 @@ export interface RevolutXConfig {
   private_key_path?: string;
 }
 
+function resolveApiKeyFromEnv(): string | undefined {
+  const raw =
+    process.env["REVOLUT_X_API_KEY"] ?? process.env["REVOLUTX_API_KEY"];
+  if (!raw) return undefined;
+  const cleaned = raw.trim();
+  if (!/^[A-Za-z0-9]{64}$/.test(cleaned)) return undefined;
+  return cleaned;
+}
+
 function defaultConfigDir(): string {
   const p = platform();
   if (p === "win32") {
@@ -109,15 +118,21 @@ export function ensureConfigDir(): void {
 
 export function loadConfig(): RevolutXConfig {
   const configFile = getConfigFile();
+  const envApiKey = resolveApiKeyFromEnv();
   if (!existsSync(configFile)) {
-    return {};
+    return envApiKey ? { api_key: envApiKey } : {};
   }
   assertSecurePermissions(configFile, "config file");
+  let parsed: RevolutXConfig;
   try {
-    return JSON.parse(readFileSync(configFile, "utf-8")) as RevolutXConfig;
+    parsed = JSON.parse(readFileSync(configFile, "utf-8")) as RevolutXConfig;
   } catch {
-    return {};
+    parsed = {};
   }
+  if (envApiKey) {
+    parsed.api_key = envApiKey;
+  }
+  return parsed;
 }
 
 export function saveConfig(config: RevolutXConfig): void {

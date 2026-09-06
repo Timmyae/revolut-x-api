@@ -121,7 +121,11 @@ Edit `~/.config/Claude/claude_desktop_config.json` (or equivalent):
 
 | Variable | Default | Description |
 |----------|---------|-------------|
+| `REVOLUT_X_API_KEY` | — | API key override from environment (recommended for Codex Secret / CI) |
+| `REVOLUTX_API_KEY` | — | Legacy alias for API key override |
 | `REVOLUTX_CONFIG_DIR` | `~/.config/revolut-x` | Config directory for API keys |
+
+API key resolution uses environment first, then `config.json`.
 
 ### First-time setup
 

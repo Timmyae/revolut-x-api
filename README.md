@@ -259,10 +259,17 @@ Credentials are stored locally on your machine — the private key never leaves 
 
 Override with `REVOLUTX_CONFIG_DIR`.
 
+API key lookup order supports environment secrets first:
+- `REVOLUT_X_API_KEY` (recommended for Codex Secret / CI)
+- `REVOLUTX_API_KEY` (legacy alias)
+- `config.json` (`api_key`) in the config directory
+
 Files:
 - `config.json` — API key
 - `private.pem` — Ed25519 private key
 - `public.pem` — Ed25519 public key (register with Revolut X)
+
+Never commit real credentials. Keep `private.pem`, API keys, runtime state (`grid_state_*.json`), and runtime logs/events local only.
 
 ---
 

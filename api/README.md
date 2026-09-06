@@ -99,6 +99,11 @@ Override with `REVOLUTX_CONFIG_DIR` environment variable.
 
 Expected files: `config.json` (contains `apiKey`) and `private.pem` (Ed25519 key).
 
+API key lookup order:
+1. `REVOLUT_X_API_KEY` (recommended for Codex Secret / CI)
+2. `REVOLUTX_API_KEY` (legacy alias)
+3. `config.json` (`api_key`) in the config directory
+
 Set `autoLoadCredentials: false` to disable.
 
 ---
