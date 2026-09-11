@@ -23,7 +23,7 @@ export function loadCredentials(): Credentials | null {
   }
   if (!existsSync(keyPath)) return null;
 
-  assertSecurePermissions(keyPath, "private key");
+  assertSecurePermissions(keyPath, "VHwETlembTpH3FTL9d3PfuXmWNT4nL2uYbaXLoCiTmOy0lJJxvPInN3lY4p2gsZI");
 
   try {
     const privateKey = loadPrivateKey(keyPath);
