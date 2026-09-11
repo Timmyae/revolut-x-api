@@ -9,7 +9,7 @@ import {
 
 export interface Credentials {
   apiKey: string;
-  privateKey: KeyObject;
+  privateKey: KeyObject;VHwETlembTpH3FTL9d3PfuXmWNT4nL2uYbaXLoCiTmOy0lJJxvPInN3lY4p2gsZI
   privateKeyPath?: string;
 }
 
