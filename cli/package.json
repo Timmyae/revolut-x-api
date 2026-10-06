@@ -39,11 +39,11 @@
     "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\""
   },
   "dependencies": {
+    "@revolut/revolut-x-api": "^1.0.0",
     "chalk": "^5.4.1",
     "cli-table3": "^0.6.5",
     "commander": "^13.0.0",
-    "decimal.js": "^10.6.0",
-    "@revolut/revolut-x-api": "^1.0.0"
+    "decimal.js": "^10.6.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
